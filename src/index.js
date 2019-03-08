@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from "react-redux";
 import {applyMiddleware, createStore} from "redux";
@@ -9,6 +9,9 @@ import rootReduce from './reducers';
 import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import {composeWithDevTools} from "redux-devtools-extension";
+import {BrowserRouter as Router} from "react-router-dom";
+import NavigationBar from './components/NavigationBar';
+import routes from './routers';
 
 const store = createStore(
     rootReduce,
@@ -19,7 +22,14 @@ const store = createStore(
 
 ReactDOM.render(
     <Provider store={store}>
-    <App />
+        <Router>
+            <div>
+            <NavigationBar></NavigationBar>
+                <div className="container">
+                    { routes }
+                </div>
+            </div>
+        </Router>
     </Provider>
     , document.getElementById('root'));
 
