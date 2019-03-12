@@ -1,4 +1,5 @@
 import React ,{ Component } from 'react';
+import PropTypes from 'prop-types'
 class SignUpForm extends Component{
     constructor(props){
         super(props)
@@ -9,12 +10,16 @@ class SignUpForm extends Component{
             passwordConfirmation: '',
         }
     }
+    // static propTypes = {
+    //     userSignupRequest: PropTypes.func.isRequired,
+    // }
     onChange(e) {// react 的数据双向绑定
         this.setState({[e.target.name]:e.target.value})
     }
     onSubmit(e) {
         e.preventDefault();
         console.log(this.state)
+        this.props.userSignupRequest(this.state);
     }
     render() {
         return (
@@ -66,4 +71,7 @@ class SignUpForm extends Component{
         );
     }
 }
+SignUpForm.propTypes={
+    userSignupRequest:PropTypes.func.isRequired,
+} //   为什么要这样用静态属性
 export default SignUpForm;
