@@ -8,8 +8,11 @@ const validateInput = (data) => {
   let errors = {};
   validator.isEmpty(data.username) && (errors.username = "the field is required");
   validator.isEmpty(data.email) && (errors.email = "the field is required");
+  validator.isEmail(data.email) && (errors.email = "the email is invalid");
+
   validator.isEmpty(data.password) && (errors.password = "the field is required");
   validator.isEmpty(data.passwordConfirmation) && (errors.passwordConfirmation = "the field is required");
+  !validator.equals(data.password,data.passwordConfirmation) && (errors.data.passwordConfirmation = "Must be match");
 
   return{
     errors,
@@ -18,11 +21,14 @@ const validateInput = (data) => {
 }
 
 router.post('/',(req,res) => {
-  const {errors, isValid} = validateInput(req.body);
+  setTimeout(()=>{
+    const {errors, isValid} = validateInput(req.body);
 
-  if(!isValid) {
-    res.status(400).json(errors);
-  }
+    if(!isValid) {
+      res.status(400).json(errors);
+    }
+
+  },5000)
 
 });
 
