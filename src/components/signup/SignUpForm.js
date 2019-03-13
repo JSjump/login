@@ -1,6 +1,8 @@
 import React ,{ Component } from 'react';
 import PropTypes from 'prop-types'
 import classnames from 'classnames';
+// import {withRouter} from "react-router-dom"; // 路由跳转中的一种方法
+
 class SignUpForm extends Component{
     constructor(props){
         super(props)
@@ -16,6 +18,9 @@ class SignUpForm extends Component{
     static propTypes = {
         userSignupRequest: PropTypes.func.isRequired,
     }
+    static contextTypes = { // 路由跳转的另外一种方法
+        router:PropTypes.object,
+    }
     onChange(e) {// react 的数据双向绑定
         this.setState({[e.target.name]:e.target.value})
     }
@@ -24,6 +29,7 @@ class SignUpForm extends Component{
             e.preventDefault();
             this.setState({isLoading: true});
             const {data} =  await this.props.userSignupRequest(this.state);
+            this.context.router.history.push('/')
         }catch (e) {
             this.setState({ errors: e.response.data,isLoading:false})
         }
@@ -86,4 +92,5 @@ class SignUpForm extends Component{
 // SignUpForm.propTypes={
 //     userSignupRequest:PropTypes.func.isRequired,
 // } //   为什么要这样用静态属性
+// export default withRouter(SignUpForm);
 export default SignUpForm;
