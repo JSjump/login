@@ -17,6 +17,7 @@ class SignUpForm extends Component{
     }
     static propTypes = {
         userSignupRequest: PropTypes.func.isRequired,
+        addFlashMessage: PropTypes.func.isRequired,
     }
     static contextTypes = { // 路由跳转的另外一种方法
         router:PropTypes.object,
@@ -29,7 +30,12 @@ class SignUpForm extends Component{
             e.preventDefault();
             this.setState({isLoading: true});
             const {data} =  await this.props.userSignupRequest(this.state);
+            this.props.addFlashMessage({
+                type: "success",
+                text: "You signed up successfully. welcome"
+            });
             this.context.router.history.push('/')
+
         }catch (e) {
             this.setState({ errors: e.response.data,isLoading:false})
         }
