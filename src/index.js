@@ -12,7 +12,7 @@ import {composeWithDevTools} from "redux-devtools-extension";
 import {BrowserRouter as Router} from "react-router-dom";
 import NavigationBar from './components/NavigationBar';
 import routes from './routers';
-
+import FlashMessagesList from './components/flash/FlashMessagesList';
 const store = createStore(
     rootReduce,
     composeWithDevTools(
@@ -25,6 +25,7 @@ ReactDOM.render(
         <Router>
             <div>
             <NavigationBar></NavigationBar>
+                <FlashMessagesList></FlashMessagesList>
                 <div className="container">
                     { routes }
                 </div>
