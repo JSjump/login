@@ -9,6 +9,8 @@ class FlashMessage extends Component{
     // onClick() {
     //     this.props.deleteFlashMessage(this.props.message.id)
     // }
+    // 必须谨慎对待jsx回调函数中的this, 类的方法默认是不会绑定this的。  所以要用bind
+
     // 属性初始化器语法；
     onClick = () => {
         this.props.deleteFlashMessage(this.props.message.id)
