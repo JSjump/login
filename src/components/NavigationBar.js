@@ -18,7 +18,7 @@ class NavigationBar extends Component{
                             <Link className="nav-link" to='/signup'>Sign Up</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Link</a>
+                            <a className="nav-link" href="/login">Login</a>
                         </li>
                     </ul>
                 </div>
