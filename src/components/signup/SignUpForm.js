@@ -13,17 +13,37 @@ class SignUpForm extends Component{
             passwordConfirmation: '',
             errors: {},
             isLoading: false,
+            invalid: false,
         }
     }
     static propTypes = {
         userSignupRequest: PropTypes.func.isRequired,
         addFlashMessage: PropTypes.func.isRequired,
+        clientCheck: PropTypes.func.isRequired,
     }
     static contextTypes = { // 路由跳转的另外一种方法
         router:PropTypes.object,
     }
     onChange(e) {// react 的数据双向绑定
         this.setState({[e.target.name]:e.target.value})
+    }
+    clientCheck= (e) => {
+        const filed =e.target.name;
+        const val = e.target.value;
+        if(val !== ''){
+            this.props.clientCheck(val).then(res =>{
+               let  errors =this.state.errors;
+               let invalid;
+               if(res.data.user){
+                   errors[filed] = "There is user with such " + filed;
+                   invalid = true;
+               }else{
+                   errors[filed]='';
+                   invalid = false;
+               }
+               this.setState({errors,invalid})
+            })
+        }
     }
     async onSubmit(e) {
         try {
@@ -51,6 +71,7 @@ class SignUpForm extends Component{
                         value={this.state.username}
                         onChange={this.onChange.bind(this)}
                         type="text"
+                        onBlur={this.clientCheck}
                     name="username"
                     className={classnames('form-control',{'is-invalid':errors.username})}/>
                     {errors.username && <span className='form-text text-muted'>{errors.username}</span>}
@@ -62,6 +83,7 @@ class SignUpForm extends Component{
                         onChange={this.onChange.bind(this)}
                         type="text"
                         name="email"
+                        onBlur={this.onBlur}
                         className={classnames('form-control',{'is-invalid':errors.email})}/>
                     {errors.email && <span className='form-text text-muted'>{errors.email}</span>}
                 </div>
@@ -87,7 +109,9 @@ class SignUpForm extends Component{
                 </div>
 
                 <div className="form-group">
-                    <button disabled={this.state.isLoading} className="btn btn-primary btn-lg">
+                    <button
+                        disabled={this.state.isLoading || this.state.invalid}
+                        className="btn btn-primary btn-lg">
                         Sign up
                     </button>
                 </div>
