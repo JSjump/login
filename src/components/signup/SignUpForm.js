@@ -92,7 +92,7 @@ class SignUpForm extends Component{
                     <input
                         value={this.state.password}
                         onChange={this.onChange.bind(this)}
-                        type="text"
+                        type="password"
                         name="password"
                         className={classnames('form-control',{'is-invalid':errors.password})}/>
                     {errors.password && <span className='form-text text-muted'>{errors.password}</span>}
@@ -102,7 +102,7 @@ class SignUpForm extends Component{
                     <input
                         value={this.state.passwordConfirmation}
                         onChange={this.onChange.bind(this)}
-                        type="text"
+                        type="password"
                         name="passwordConfirmation"
                         className={classnames('form-control',{'is-invalid':errors.passwordConfirmation})}/>
                     {errors.passwordConfirmation && <span className='form-text text-muted'>{errors.passwordConfirmation}</span>}
