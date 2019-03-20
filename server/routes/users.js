@@ -9,7 +9,7 @@ const bcrypt = require('bcryptjs');
 // var bcrypt = require('bcryptjs');
 let router = express.Router();
 
-const validateInput = (data) => {
+const commonValidateInput = (data) => {
   let errors = {};
   validator.isEmpty(data.username) && (errors.username = "the field is required");
   validator.isEmpty(data.email) && (errors.email = "the field is required");
@@ -25,20 +25,43 @@ const validateInput = (data) => {
   }
 }
 
+const validateInput = (data,otherValidations) => {
+ let {errors} = otherValidations(data);
+    return User.query({
+        where: {email:data.email},
+        orWhere: {username:data.username}
+    }).fetch().then(user => {
+        if(user){
+            if(user.get('email') === data.email){
+                errors.email = 'there is user with such email';
+            }
+            if(user.get('username') === data.username){
+                errors.username = 'there is user with such username';
+            }
+        }
+        return {
+            errors,
+            isValid: isEmpty(errors)
+        }
+    } )
+}
+
 router.post('/',(req,res) => {
-    const {errors, isValid} = validateInput(req.body);
-    if(isValid) {
-      const {username,password,email} = req.body;
-        const salt = bcrypt.genSaltSync(10);
-      const password_digest = bcrypt.hashSync(password,salt);
-      User.forge({
-          username,password_digest,email
-      },{hasTimestamps:true}).save()
-          .then(user =>res.json({success:true}))
-          .catch(err => res.status(500).json({errors:err}))
-    }else {
-      res.status(400).json(errors);
-    }
+    validateInput(req.body,commonValidateInput).then(({errors,isValid}) => {
+        if(isValid) {
+            const {username,password,email} = req.body;
+            const salt = bcrypt.genSaltSync(10);
+            const password_digest = bcrypt.hashSync(password,salt);
+            User.forge({
+                username,password_digest,email
+            },{hasTimestamps:true}).save()
+                .then(user =>res.json({success:true}))
+                .catch(err => res.status(500).json({errors:err}))
+        }else {
+            res.status(400).json(errors);
+        }
+
+    });
 });
 
 export default router;
