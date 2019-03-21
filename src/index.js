@@ -13,12 +13,21 @@ import {BrowserRouter as Router} from "react-router-dom";
 import NavigationBar from './components/NavigationBar';
 import routes from './routers';
 import FlashMessagesList from './components/flash/FlashMessagesList';
+import setAuthorizationToken from './utils/setAuthorizationToken';
+import {setCurrentUser} from './actions/login';
+import jwtDecode from 'jwt-decode';
 const store = createStore(
     rootReduce,
     composeWithDevTools(
         applyMiddleware(thunk,logger)
     )
 );
+
+if(localStorage.jwtToken){
+    setAuthorizationToken(localStorage.jwtToken);
+    store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)))
+}
+
 
 ReactDOM.render(
     <Provider store={store}>
