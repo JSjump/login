@@ -2,6 +2,13 @@ import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
 import {SET_CURRENT_USER} from '../constants/index'
+export const logOut = () => {
+    return dispatch => {
+        localStorage.removeItem('jwtToken')
+        setAuthorizationToken(false);
+        dispatch(setCurrentUser({}))
+    }
+}
 export const setCurrentUser = (user) => {
     return {
         type: SET_CURRENT_USER,
